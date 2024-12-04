@@ -1,0 +1,46 @@
+name: Deploy AWS Lambda
+
+
+# Main Event listener when there is any Github Pushes
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lambda/'
+
+jobs:
+    # Name of the overall Job
+  deploy-lambda:
+
+    # Sets up the runner
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+    # Setups up Python Enviroment
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.13'
+
+    # Installs any packages or Dependencies
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r lambda/requirements.txt -t lambda/
+
+    # Sets up AWS credentials
+      - name: Configure AWS Creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-access-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+    # Zips lambda directory and updates lambda function
+      - name: Deploy Lambda Function
+        run: |
+          cd lambda
+          zip -r lambda.zip .
+          aws lambda update-function-code --function-name my-test-cicd-lambda --zip-file fileb://lambda.zip
