@@ -1,7 +1,6 @@
 name: Deploy AWS Lambda
 
-
-# Main Event listener when there is any Github Pushes
+# Main event listener when there is any GitHub push
 on:
   push:
     branches:
@@ -10,27 +9,27 @@ on:
       - 'lambda/'
 
 jobs:
-    # Name of the overall Job
+  # Name of the overall job
   deploy-lambda:
-
     # Sets up the runner
     runs-on: ubuntu-latest
     steps:
+      # Check out the repository
       - uses: actions/checkout@v2
 
-    # Setups up Python Enviroment
+      # Set up Python environment
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.12'
 
-    # Installs any packages or Dependencies
+      # Install dependencies
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r lambda/requirements.txt -t lambda/
 
-    # Sets up AWS credentials
+      # Configure AWS credentials
       - name: Configure AWS Creds
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -38,7 +37,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
 
-    # Zips lambda directory and updates lambda function
+      # Zip the Lambda directory and update the Lambda function
       - name: Deploy Lambda Function
         run: |
           cd lambda
