@@ -6,20 +6,22 @@ Parameters:
     Type: String
     Default: test
     AllowedValues:
-    - test
-    - staging
-    - production
+      - test
+      - staging
+      - production
 
 Resources:
   MyS3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Sub '${AWS::StackName}-${Environment}-bucket'
-    Tags:
-      - Key: Environment
-        Value: !Ref Environment
+      BucketName: !Sub '${AWS::StackName}-${Environment}-bucket-tmusk'
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Purpose
+          Value: GithubActionsTesting
 
 Outputs:
-    BucketName:
-      Description: 'Name of created S3 Bucket'
-      Value: !Ref MyS3Bucket
+  BucketName:
+    Description: 'Name of created S3 Bucket'
+    Value: !Ref MyS3Bucket
