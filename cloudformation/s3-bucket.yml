@@ -6,9 +6,9 @@ Parameters:
     Type: String
     Default: test
     AllowedValues:
-    - test
-    - staging
-    - production
+      - test
+      - staging
+      - production
 
 Resources:
   MyS3Bucket:
@@ -18,10 +18,10 @@ Resources:
       Tags:
         - Key: Environment
           Value: !Ref Environment
-        - Key: Environment
+        - Key: Purpose
           Value: GithubActionsTesting
 
 Outputs:
-    BucketName:
-      Description: 'Name of created S3 Bucket'
-      Value: !Ref MyS3Bucket
+  BucketName:
+    Description: 'Name of created S3 Bucket'
+    Value: !Ref MyS3Bucket
