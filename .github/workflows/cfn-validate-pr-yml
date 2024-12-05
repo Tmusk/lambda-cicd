@@ -6,7 +6,7 @@ on:
       - 'cloudformation/**'
 
 permissions:
-  pull-request: write
+  pull-requests: write
   contents: read
 
 jobs:
@@ -42,10 +42,11 @@ jobs:
               repo: context.repo.repo,
               body: `CloudFormation test stack deployed. Stack name: pr-test-stack-${{ github.event.pull_request.number }}`
             })
+            return
 
   cleanup-on-merge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: ${{ github.event.pull_request.merged == true }}
     steps:
       - name: Configure AWS Creds
         uses: aws-actions/configure-aws-credentials@v1
